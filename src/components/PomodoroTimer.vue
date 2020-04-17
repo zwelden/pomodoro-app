@@ -27,7 +27,7 @@
 
         <div class="text-center rounded overflow-hidden shadow-lg border border-gray-200 px-2 py-8 bg-white">
             <div class="font-semibold text-2xl text-gray-600 mb-2">
-                <span class="time-type">Focused</span> Time
+                <span class="time-type">{{ timerType }}</span> Time
             </div>
             <div class="text-gray-800 text-4xl mb-3 font-semibold tracking-widest">
                 {{ remainingTimeDisplay }}
@@ -55,15 +55,31 @@ export default {
     name: 'PomodoroTimer',
     data() {
         return {
+            currentTimeBlock: [
+                {type: 'focused', seconds: 15},
+                {type: 'rest', seconds: 5}
+            ],
+            timers: [
+                [
+                    {type: 'focused', seconds: 16},
+                    {type: 'rest', seconds: 6}
+                ],
+                [
+                    {type: 'focused', seconds: 14},
+                    {type: 'rest', seconds: 4}
+                ]
+            ],
             timerActive: false,
             secondsPassed: 0,
-            remainingTime: 1500, // seconds
+            remainingTime: 0, // seconds
             startTime: 0,
             endTime: 0,
             timerInterval: null,
             lastIterationStart: 0,
             targetIntervalTime: 1000,
-            timerText: 'Start'
+            timerType: 'Focused',
+            timerText: 'Start',
+            completionSound: new Audio(require('../assets/complete.mp3'))
         }
     },
     methods: {
@@ -75,7 +91,7 @@ export default {
                return;
             }
 
-            this.stopTimer();
+            this.pauseTimer();
         },
 
         startTimer() {
@@ -87,13 +103,60 @@ export default {
             setTimeout(this.secondCountDown, 1000);
         },
 
-        stopTimer() {
+        pauseTimer() {
+            this.clearTimer();
+            this.timerText = 'Start';
+        },
+
+        clearTimer() {
             this.lastIterationStart = 0;
             this.startTime = 0;
             this.endTime = 0;
             this.targetIntervalTime = 1000;
-            this.timerText = 'Start';
         },
+
+        endTimer() {
+            this.clearTimer();
+            this.timerActive = false;
+            this.timerText = 'Start';
+            this.playCompletionSound();
+
+            setTimeout(this.getNextTimer, 1000);
+        },
+
+        playCompletionSound() {
+            let _this = this;
+            this.completionSound.play();
+
+            setTimeout(function () {
+                _this.completionSound.play();
+            }, 2700);
+        },
+
+        setTimerFromCurrentTimeBlock() {
+            if (this.currentTimeBlock.length <= 0) {
+                return;
+            }
+
+            const timerTypes = {
+                'focused': 'Focused',
+                'rest': 'Rest'
+            };
+
+            const timerBlock = this.currentTimeBlock.shift();
+
+            this.timerType = timerTypes[timerBlock.type];
+            this.remainingTime = timerBlock.seconds
+        },
+
+        getNextTimer() {            
+            if ((!this.currentTimeBlock || this.currentTimeBlock.length <= 0) && this.timers.length > 0) {
+                this.currentTimeBlock = this.timers.shift();
+            }
+
+            this.setTimerFromCurrentTimeBlock();
+        },
+
 
         secondCountDown() {
             if (!this.timerActive) { return; }
@@ -142,7 +205,7 @@ export default {
             console.log('\n');
 
             if (this.remainingTime <= 0 || currentTime > this.endTime) {
-                // TODO: END CONDITION
+                this.endTimer();
                 return;
             }
             
@@ -155,6 +218,9 @@ export default {
             let seconds = this.remainingTime % 60;
             return minutes + ':' + ('0' + seconds).slice(-2);
         }
+    },
+    created() {
+        this.getNextTimer();
     }
 }
 </script>
