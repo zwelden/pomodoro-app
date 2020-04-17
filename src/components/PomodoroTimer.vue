@@ -33,8 +33,11 @@
                 {{ remainingTimeDisplay }}
             </div>
             <div class="">
-                <div @click="toggleTimer" class="rounded inline-block px-10 py-2 text-gray-700 bg-blue-200 text-lg text-blue-700 font-semibold tracking-wide">
-                    Start
+                <div @click="toggleTimer" 
+                    class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer" 
+                    v-bind:class="timerActive ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'"
+                >
+                    {{ timerText }}
                 </div>
             </div>
         </div>
@@ -59,7 +62,8 @@ export default {
             endTime: 0,
             timerInterval: null,
             lastIterationStart: 0,
-            targetIntervalTime: 1000
+            targetIntervalTime: 1000,
+            timerText: 'Start'
         }
     },
     methods: {
@@ -79,6 +83,7 @@ export default {
             this.startTime = Date.now();
             this.endTime = this.startTime + diff;
 
+            this.timerText = 'Stop';
             setTimeout(this.secondCountDown, 1000);
         },
 
@@ -87,6 +92,7 @@ export default {
             this.startTime = 0;
             this.endTime = 0;
             this.targetIntervalTime = 1000;
+            this.timerText = 'Start';
         },
 
         secondCountDown() {
