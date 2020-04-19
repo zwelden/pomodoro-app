@@ -1,74 +1,54 @@
 <template>
     <div class="pomodoro-timer max-w-sm w-full">
-        <div class="timer-card flex justify-between mb-6 rounded overflow-hidden shadow-lg border border-gray-200 px-2 py-8 bg-white">
-            <div class="px-3 text-center">
-                <div class="font-semibold text-gray-700">
-                    Focus Duration
-                </div>
-                <div class="px-2">
-                    <input type="number" value="25" id="focus-duration" class="text-2xl text-center shadow appearance-none border rounded w-full py-2 pl-3 pr-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                <div class="text-gray-600">
-                    minutes
-                </div>
-            </div>
-            <div class="px-3 text-center">
-                <div class="font-semibold text-gray-700">
-                    Rest Duration
-                </div>
-                <div class="px-2">
-                    <input type="number" value="5" id="rest-duration" class="text-2xl text-center shadow appearance-none border rounded w-full py-2 pl-3 pr-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                <div class="text-gray-600">
-                    minutes
-                </div>
-            </div>
-        </div>
+
+        <TimeBlockCard :focus-time="currentTimerBlockFocusMinutes" :rest-time="currentTimerBlockRestMinutes"></TimeBlockCard>
 
         <div class="text-center rounded overflow-hidden shadow-lg border border-gray-200 px-2 py-8 bg-white">
             <div class="font-semibold text-2xl text-gray-600 mb-2">
-                <span class="time-type">{{ timerType }}</span> Time
+                <span class="time-type">{{ timerType }}</span>
             </div>
-            <div class="text-gray-800 text-4xl mb-3 font-semibold tracking-widest">
+            <div class="countdown-timer-text text-blue-700 text-5xl mb-3 font-semibold tracking-widest">
                 {{ remainingTimeDisplay }}
             </div>
             <div class="">
                 <div @click="toggleTimer" 
-                    class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer" 
-                    v-bind:class="timerActive ? 'bg-red-200 text-red-700' : 'bg-green-200 text-green-700'"
+                    class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer border-0 border-b-2" 
+                    v-bind:class="timerActive ? 'bg-red-200 text-red-700 border-red-400' : 'bg-green-200 text-green-700 border-green-400'"
                 >
                     {{ timerText }}
                 </div>
             </div>
         </div>
-
-        {{ startTime }}
-        <br>
-        {{ endTime }}
-        <br>
-        {{ remainingTime }}
     </div>
 </template>
 
 <script>
+import TimeBlockCard from './TimeBlockCard.vue';
+
 export default {
     name: 'PomodoroTimer',
+    components: {
+        TimeBlockCard
+    },
     data() {
         return {
-            currentTimeBlock: [
-                {type: 'focused', seconds: 15},
-                {type: 'rest', seconds: 5}
-            ],
+            currentTimeBlock: [],
             timers: [
                 [
-                    {type: 'focused', seconds: 16},
-                    {type: 'rest', seconds: 6}
+                    {type: 'focused', minutes: 1},
+                    {type: 'rest', minutes: 1}
                 ],
                 [
-                    {type: 'focused', seconds: 14},
-                    {type: 'rest', seconds: 4}
+                    {type: 'focused', minutes: 16},
+                    {type: 'rest', minutes: 6}
+                ],
+                [
+                    {type: 'focused', minutes: 14},
+                    {type: 'rest', minutes: 4}
                 ]
             ],
+            currentTimerBlockFocusMinutes: 0,
+            currentTimerBlockRestMinutes: 0,
             timerActive: false,
             secondsPassed: 0,
             remainingTime: 0, // seconds
@@ -139,29 +119,34 @@ export default {
             }
 
             const timerTypes = {
-                'focused': 'Focused',
+                'focused': 'Focus',
                 'rest': 'Rest'
             };
 
             const timerBlock = this.currentTimeBlock.shift();
 
             this.timerType = timerTypes[timerBlock.type];
-            this.remainingTime = timerBlock.seconds
+            this.remainingTime = timerBlock.minutes * 60
+        },
+
+        loadCurrentTimerMinutes() {
+            this.currentTimerBlockFocusMinutes = this.currentTimeBlock[0].minutes;
+            this.currentTimerBlockRestMinutes = this.currentTimeBlock[1].minutes;
         },
 
         getNextTimer() {            
             if ((!this.currentTimeBlock || this.currentTimeBlock.length <= 0) && this.timers.length > 0) {
                 this.currentTimeBlock = this.timers.shift();
-            }
 
+                this.loadCurrentTimerMinutes();
+            }
+            
             this.setTimerFromCurrentTimeBlock();
         },
-
 
         secondCountDown() {
             if (!this.timerActive) { return; }
 
-            console.log('#######');
             let currentTime = Date.now();
 
             let calcTime = (this.lastIterationStart > 0) ? this.lastIterationStart : this.startTime;
@@ -179,10 +164,6 @@ export default {
             msTotalDrift = (Math.floor((elapsedTime - this.secondsPassed) * 100) / 100) * 1000;
 
             if (msTotalDrift > 10) {
-                console.log(true);
-                console.log(nextTimeout);
-                console.log('...')
-
                 nextTimeout -= msTotalDrift;
             }
 
@@ -195,14 +176,6 @@ export default {
             }
 
             this.targetIntervalTime = nextTimeout;
-
-            console.log(timeDiff);
-            console.log(nextTimeout);
-            console.log('---');
-            console.log(msTotalDrift);
-            console.log(this.secondsPassed);
-            console.log(elapsedTime);
-            console.log('\n');
 
             if (this.remainingTime <= 0 || currentTime > this.endTime) {
                 this.endTimer();
@@ -227,5 +200,7 @@ export default {
 
 
 <style>
-
+.countdown-timer-text {
+    font-family: 'Fira Code', monospace;
+}
 </style>
