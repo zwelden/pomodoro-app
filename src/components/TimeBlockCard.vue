@@ -1,5 +1,5 @@
 <template>
-    <div class="timer-card flex justify-between mb-6 rounded overflow-hidden shadow-lg border border-gray-200 px-2 py-8 bg-white">
+    <div class="timer-card flex justify-between mb-6 rounded overflow-hidden ">
             <div class="px-3 text-center">
                 <div class="font-semibold text-gray-700">
                     Focus Duration

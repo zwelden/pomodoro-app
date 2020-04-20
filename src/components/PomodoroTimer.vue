@@ -2,33 +2,35 @@
     <div class="pomodoro-timer max-w-sm w-full">
 
         <TimeBlockCard :focus-time="currentTimerBlockFocusMinutes" :rest-time="currentTimerBlockRestMinutes"></TimeBlockCard>
+        
+        <TimerDisplay :title="timerType" 
+                :time-remaining="remainingTime" 
+                :total-time="timerTotalTime" 
+                :timer-active="timerActive" 
+                class="mb-6">
+        </TimerDisplay>
 
-        <div class="text-center rounded overflow-hidden shadow-lg border border-gray-200 px-2 py-8 bg-white">
-            <div class="font-semibold text-3xl text-gray-600 mb-2">
-                <span class="time-type">{{ timerType }}</span>
-            </div>
-            <div class="countdown-timer-text text-blue-700 text-5xl mb-6 font-semibold tracking-widest">
-                {{ remainingTimeDisplay }}
-            </div>
-            <div class="">
-                <div @click="toggleTimer" 
-                    class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer border-0 border-b-2" 
-                    v-bind:class="timerActive ? 'bg-red-200 text-red-700 border-red-400' : 'bg-green-200 text-green-700 border-green-400'"
-                >
-                    {{ timerText }}
-                </div>
+        <div class="text-center rounded overflow-hidden ">
+            <div @click="toggleTimer" 
+                class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer border-0 border-b-2" 
+                v-bind:class="timerActive ? 'bg-red-200 text-red-700 border-red-400' : 'bg-green-200 text-green-700 border-green-400'"
+            >
+                {{ timerText }}
             </div>
         </div>
+
     </div>
 </template>
 
 <script>
 import TimeBlockCard from './TimeBlockCard.vue';
+import TimerDisplay from './TimerDisplay.vue';
 
 export default {
     name: 'PomodoroTimer',
     components: {
-        TimeBlockCard
+        TimeBlockCard,
+        TimerDisplay
     },
     data() {
         return {
@@ -56,6 +58,7 @@ export default {
             timerActive: false,
             secondsPassed: 0,
             remainingTime: 0, // seconds
+            timerTotalTime: 0,
             startTime: 0,
             endTime: 0,
             timerInterval: null,
@@ -63,6 +66,7 @@ export default {
             targetIntervalTime: 1000,
             timerType: 'Focused',
             timerText: 'Start',
+            someNumber: 1234,
             completionSound: new Audio(require('../assets/complete.mp3'))
         }
     },
@@ -80,6 +84,7 @@ export default {
 
         startTimer() {
             let diff = this.remainingTime * 1000; // seconds to milliseconds
+            this.timerTotalTime = this.remainingTime;
             this.startTime = Date.now();
             this.endTime = this.startTime + diff;
 
