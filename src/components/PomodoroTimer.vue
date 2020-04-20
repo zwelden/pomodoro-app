@@ -4,10 +4,10 @@
         <TimeBlockCard :focus-time="currentTimerBlockFocusMinutes" :rest-time="currentTimerBlockRestMinutes"></TimeBlockCard>
 
         <div class="text-center rounded overflow-hidden shadow-lg border border-gray-200 px-2 py-8 bg-white">
-            <div class="font-semibold text-2xl text-gray-600 mb-2">
+            <div class="font-semibold text-3xl text-gray-600 mb-2">
                 <span class="time-type">{{ timerType }}</span>
             </div>
-            <div class="countdown-timer-text text-blue-700 text-5xl mb-3 font-semibold tracking-widest">
+            <div class="countdown-timer-text text-blue-700 text-5xl mb-6 font-semibold tracking-widest">
                 {{ remainingTimeDisplay }}
             </div>
             <div class="">
@@ -32,20 +32,24 @@ export default {
     },
     data() {
         return {
-            currentTimeBlock: [],
+            currentTimeBlock: {
+                focusMinutes : 0,
+                restMinutes : 0,
+                currentTimer: 'next'
+            },
             timers: [
-                [
-                    {type: 'focused', minutes: 1},
-                    {type: 'rest', minutes: 1}
-                ],
-                [
-                    {type: 'focused', minutes: 16},
-                    {type: 'rest', minutes: 6}
-                ],
-                [
-                    {type: 'focused', minutes: 14},
-                    {type: 'rest', minutes: 4}
-                ]
+                {
+                    focusMinutes : 1,
+                    restMinutes : 1
+                },
+                {
+                    focusMinutes : 16,
+                    restMinutes : 6
+                },
+                {
+                    focusMinutes : 14,
+                    restMinutes : 4
+                },
             ],
             currentTimerBlockFocusMinutes: 0,
             currentTimerBlockRestMinutes: 0,
@@ -114,31 +118,45 @@ export default {
         },
 
         setTimerFromCurrentTimeBlock() {
-            if (this.currentTimeBlock.length <= 0) {
+            if (this.currentTimeBlock.focusMinutes <= 0 || this.currentTimeBlock.restMinutes <= 0) {
+                return;
+            }
+
+            if (this.currentTimeBlock.currentTimer === 'next') {
                 return;
             }
 
             const timerTypes = {
-                'focused': 'Focus',
+                'focus': 'Focus',
                 'rest': 'Rest'
             };
 
-            const timerBlock = this.currentTimeBlock.shift();
+            this.timerType = timerTypes[this.currentTimeBlock.currentTimer];
+            this.remainingTime = this.currentTimeBlock[this.currentTimeBlock.currentTimer + 'Minutes'] * 60
 
-            this.timerType = timerTypes[timerBlock.type];
-            this.remainingTime = timerBlock.minutes * 60
+            if (this.currentTimeBlock.currentTimer === 'focus') {
+                this.currentTimeBlock.currentTimer = 'rest';
+            } else if (this.currentTimeBlock.currentTimer === 'rest') {
+                this.currentTimeBlock.currentTimer = 'next';
+            }
         },
 
         loadCurrentTimerMinutes() {
-            this.currentTimerBlockFocusMinutes = this.currentTimeBlock[0].minutes;
-            this.currentTimerBlockRestMinutes = this.currentTimeBlock[1].minutes;
+            this.currentTimerBlockFocusMinutes = this.currentTimeBlock.focusMinutes;
+            this.currentTimerBlockRestMinutes = this.currentTimeBlock.restMinutes;
         },
 
         getNextTimer() {            
-            if ((!this.currentTimeBlock || this.currentTimeBlock.length <= 0) && this.timers.length > 0) {
+            if (
+                (!this.currentTimeBlock || !this.currentTimeBlock.focusMinutes || this.currentTimeBlock.currentTimer === 'next') 
+                && this.timers.length > 0
+            ) {
                 this.currentTimeBlock = this.timers.shift();
 
+                this.currentTimeBlock.currentTimer = 'focus';
                 this.loadCurrentTimerMinutes();
+            } else if (this.timers.length <= 0) {
+                return;
             }
             
             this.setTimerFromCurrentTimeBlock();
