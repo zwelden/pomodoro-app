@@ -1,5 +1,5 @@
 <template>
-    <div class="timer-countdown-card text-center rounded overflow-hidden shadow-lg bg-white">
+    <div class="timer-countdown-card text-center rounded overflow-hidden shadow-lg bg-indigo-100">
         <div class="timer-countdown-fill-bg"></div>
         
         <div class="radial-gradient"></div>
@@ -11,6 +11,11 @@
             <div class="countdown-timer-text text-blue-700 text-5xl font-semibold tracking-widest">
                 {{ remainingTimeDisplay }}
             </div>
+        </div>
+
+        <div class="timer-countdown-bar-container">
+            <div class="timer-countdown-bar bg-indigo-300"></div>
+            <div class="timer-countdown-ball bg-indigo-300" :style="{top: leftPosition}"></div>
         </div>
     </div>
 </template>
@@ -30,8 +35,12 @@ export default {
             let seconds = this.timeRemaining % 60;
             return minutes + ':' + ('0' + seconds).slice(-2);
         },
-        fillPercent () {
+        leftPosition () {
             let percent =  Math.floor(((this.totalTime - this.timeRemaining) / this.totalTime) * 10000) / 100;
+
+            if (!percent || percent <= 0 || isNaN(percent)) {
+                return 0;
+            }
 
             return percent + '%';
         }
@@ -43,7 +52,7 @@ export default {
     .timer-countdown-card {
         position: relative;
         padding-top: 66%;
-        border: 1px solid rgba(0, 100, 255, 0.3);
+        /* border: 1px solid rgba(0, 100, 255, 0.3); */
     }
 
     .timer-countdown-fill-bg {
@@ -52,7 +61,7 @@ export default {
         left: 0;
         right: 0;
         height: 100%;
-        background: rgba(0, 100, 255, 0.1);
+        /* background: rgba(0, 100, 255, 0.1); */
     }
 
     .timer-content {
@@ -81,5 +90,28 @@ export default {
         box-shadow: 0 0 150px 75px #fff;
         z-index: 1;
         border-radius: 100%;
+    }
+
+    .timer-countdown-bar-container {
+        position: absolute;
+        top: 2rem;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 2;
+    }
+
+    .timer-countdown-bar {
+        position: relative;
+        height: 100%;
+        width: 2px;
+    }
+
+    .timer-countdown-ball {
+        position: absolute;
+        right: -5px;
+        height: 12px;
+        width: 12px;
+        border-radius: 50%;
+        transform: translateY(-50%);
     }
 </style>
