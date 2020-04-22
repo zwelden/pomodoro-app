@@ -1,6 +1,6 @@
 <template>
-    <div class="timer-card flex justify-between mb-6 rounded overflow-hidden ">
-            <div class="px-3 text-center">
+    <div class="timer-card flex justify-between mb-6 rounded overflow-hidden">
+            <div class="px-3 text-center" :class="{'greyed-out': focusClass}">
                 <div class="font-semibold text-gray-700">
                     Focus Duration
                 </div>
@@ -11,7 +11,7 @@
                     minutes
                 </div>
             </div>
-            <div class="px-3 text-center">
+            <div class="px-3 text-center" :class="{'greyed-out': restClass}">
                 <div class="font-semibold text-gray-700">
                     Rest Duration
                 </div>
@@ -28,6 +28,29 @@
 <script>
 export default {
     name: 'TimeBlockCard',
-    props: ['focusTime', 'restTime']
+    props: ['focusTime', 'restTime', 'currentActive'],
+    computed: {
+        focusClass() {
+            if (this.currentActive !== 'focus') {
+                return true;
+            }
+
+            return false;
+        },
+        restClass() {
+            if (this.currentActive !== 'rest') {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
 }
 </script>
+
+<style>
+.greyed-out {
+    opacity: 0.4;
+}
+</style>

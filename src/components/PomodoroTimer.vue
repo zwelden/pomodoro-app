@@ -1,13 +1,13 @@
 <template>
     <div class="pomodoro-timer max-w-sm w-full">
 
-        <TimeBlockCard :focus-time="currentTimerBlockFocusMinutes" :rest-time="currentTimerBlockRestMinutes"></TimeBlockCard>
+        <TimeBlockCard :focus-time="currentTimerBlockFocusMinutes" :rest-time="currentTimerBlockRestMinutes" :current-active="currentTimeBlock.currentTimer"></TimeBlockCard>
         
         <TimerDisplay :title="timerType" 
                 :time-remaining="remainingTime" 
                 :total-time="timerTotalTime" 
                 :timer-active="timerActive" 
-                class="mb-6">
+                class="mb-8">
         </TimerDisplay>
 
         <div class="text-center rounded overflow-hidden ">
@@ -110,6 +110,12 @@ export default {
             this.timerText = 'Start';
             this.playCompletionSound();
 
+            if (this.currentTimeBlock.currentTimer === 'focus') {
+                this.currentTimeBlock.currentTimer = 'rest';
+            } else if (this.currentTimeBlock.currentTimer === 'rest') {
+                this.currentTimeBlock.currentTimer = 'next';
+            }
+            
             setTimeout(this.getNextTimer, 1000);
         },
 
@@ -138,12 +144,6 @@ export default {
 
             this.timerType = timerTypes[this.currentTimeBlock.currentTimer];
             this.remainingTime = this.currentTimeBlock[this.currentTimeBlock.currentTimer + 'Minutes'] * 60
-
-            if (this.currentTimeBlock.currentTimer === 'focus') {
-                this.currentTimeBlock.currentTimer = 'rest';
-            } else if (this.currentTimeBlock.currentTimer === 'rest') {
-                this.currentTimeBlock.currentTimer = 'next';
-            }
         },
 
         loadCurrentTimerMinutes() {
