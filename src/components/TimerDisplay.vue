@@ -23,16 +23,12 @@
 <script>
 export default {
     name: 'TimerDisplay',
-    props: ['title', 'timeRemaining', 'totalTime', 'timerActive'],
-    methods: {
-        toggleTimer() {
-            // do stuff
-        }
-    },
+    props: ['title', 'timeRemaining', 'totalTime'],
     computed: {
         remainingTimeDisplay () {
             let minutes = Math.floor(this.timeRemaining / 60);
             let seconds = this.timeRemaining % 60;
+
             return minutes + ':' + ('0' + seconds).slice(-2);
         },
         leftPosition () {
@@ -52,7 +48,6 @@ export default {
     .timer-countdown-card {
         position: relative;
         padding-top: 66%;
-        /* border: 1px solid rgba(0, 100, 255, 0.3); */
     }
 
     .timer-countdown-fill-bg {
@@ -61,7 +56,6 @@ export default {
         left: 0;
         right: 0;
         height: 100%;
-        /* background: rgba(0, 100, 255, 0.1); */
     }
 
     .timer-content {

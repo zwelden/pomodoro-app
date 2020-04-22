@@ -6,7 +6,6 @@
         <TimerDisplay :title="timerType" 
                 :time-remaining="remainingTime" 
                 :total-time="timerTotalTime" 
-                :timer-active="timerActive" 
                 class="mb-8">
         </TimerDisplay>
 
@@ -115,7 +114,7 @@ export default {
             } else if (this.currentTimeBlock.currentTimer === 'rest') {
                 this.currentTimeBlock.currentTimer = 'next';
             }
-            
+
             setTimeout(this.getNextTimer, 1000);
         },
 
