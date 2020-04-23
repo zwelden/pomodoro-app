@@ -38,20 +38,7 @@ export default {
                 restMinutes : 0,
                 currentTimer: 'next'
             },
-            timers: [
-                {
-                    focusMinutes : 1,
-                    restMinutes : 1
-                },
-                {
-                    focusMinutes : 16,
-                    restMinutes : 6
-                },
-                {
-                    focusMinutes : 14,
-                    restMinutes : 4
-                },
-            ],
+            timers: [],
             currentTimerBlockFocusMinutes: 0,
             currentTimerBlockRestMinutes: 0,
             timerActive: false,
@@ -215,6 +202,11 @@ export default {
         }
     },
     created() {
+        this.$store.commit('setConfigToDefault');
+        this.$store.commit('generateIntervals');
+
+        this.timers = this.$store.state.intervals;
+
         this.getNextTimer();
     }
 }
