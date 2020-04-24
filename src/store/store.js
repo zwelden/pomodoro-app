@@ -21,14 +21,16 @@ export const store = new Vuex.Store({
             state.intervals = [];
 
             let totalIntervals = state.pomodoroConfig.intervals;
+            console.log(totalIntervals)
 
             for (let interval = 1; interval <= totalIntervals; interval++) {
                 let timeBlock = {
                     focusMinutes: state.pomodoroConfig.focusMinutes,
                     restMinutes: state.pomodoroConfig.shortRestMinutes
                 }
-
+                console.log(interval);
                 if (interval === totalIntervals) {
+                    console.log('in if condition')
                     timeBlock.restMinutes = state.pomodoroConfig.longRestMinutes
                 }
 
