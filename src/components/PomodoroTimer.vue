@@ -9,7 +9,7 @@
                 class="mb-8">
         </TimerDisplay>
 
-        <div class="text-center rounded overflow-hidden ">
+        <div class="text-center rounded overflow-hidden mb-8">
             <div @click="toggleTimer" 
                 class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer border-0 border-b-2" 
                 v-bind:class="timerActive ? 'bg-red-200 text-red-700 border-red-400' : 'bg-green-200 text-green-700 border-green-400'"
@@ -18,18 +18,23 @@
             </div>
         </div>
 
+        <PomodoroConfigManager />
     </div>
 </template>
 
 <script>
 import TimeBlockCard from './TimeBlockCard.vue';
 import TimerDisplay from './TimerDisplay.vue';
+import PomodoroConfigManager from './PomodoroConfigManager.vue';
+
+import { EventBus } from '../eventBus';
 
 export default {
     name: 'PomodoroTimer',
     components: {
         TimeBlockCard,
-        TimerDisplay
+        TimerDisplay,
+        PomodoroConfigManager
     },
     data() {
         return {
@@ -41,7 +46,6 @@ export default {
             timers: [],
             currentTimerBlockFocusMinutes: 0,
             currentTimerBlockRestMinutes: 0,
-            timerActive: false,
             secondsPassed: 0,
             remainingTime: 0, // seconds
             timerTotalTime: 0,
@@ -50,7 +54,7 @@ export default {
             timerInterval: null,
             lastIterationStart: 0,
             targetIntervalTime: 1000,
-            timerType: 'Focused',
+            timerType: 'Focus',
             timerText: 'Start',
             someNumber: 1234,
             completionSound: new Audio(require('../assets/complete.mp3'))
@@ -58,9 +62,9 @@ export default {
     },
     methods: {
         toggleTimer() {
-            this.timerActive = !this.timerActive;
+            this.$store.commit('toggleTimerActive');
  
-            if (this.timerActive === true) {
+            if (this.$store.state.timerActive === true) {
                this.startTimer();
                return;
             }
@@ -92,9 +96,10 @@ export default {
 
         endTimer() {
             this.clearTimer();
-            this.timerActive = false;
             this.timerText = 'Start';
             this.playCompletionSound();
+
+            this.$store.commit('setTimerActiveFalse');
 
             if (this.currentTimeBlock.currentTimer === 'focus') {
                 this.currentTimeBlock.currentTimer = 'rest';
@@ -154,7 +159,7 @@ export default {
         },
 
         secondCountDown() {
-            if (!this.timerActive) { return; }
+            if (!this.$store.state.timerActive) { return; }
 
             let currentTime = Date.now();
 
@@ -195,10 +200,13 @@ export default {
         }
     },
     computed: {
-        remainingTimeDisplay: function () {
+        remainingTimeDisplay () {
             let minutes = Math.floor(this.remainingTime / 60);
             let seconds = this.remainingTime % 60;
             return minutes + ':' + ('0' + seconds).slice(-2);
+        },
+        timerActive () {
+            return this.$store.state.timerActive;
         }
     },
     created() {
@@ -208,6 +216,18 @@ export default {
         this.timers = this.$store.state.intervals;
 
         this.getNextTimer();
+    },
+    mounted() {
+        EventBus.$on('reload-timers', () => {
+            this.currentTimeBlock = {
+                focusMinutes : 0,
+                restMinutes : 0,
+                currentTimer: 'next'
+            },
+            this.timers = this.$store.state.intervals;
+
+            this.getNextTimer();
+        });
     }
 }
 </script>

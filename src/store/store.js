@@ -8,12 +8,13 @@ export const store = new Vuex.Store({
         pomodoroType: 'generated', // 'generated' / 'manual'
         pomodoroConfig: {},
         defaultPomodoroConfig: {
-            focusMinutes: 25,
-            shortRestMinutes: 5,
-            longRestMinutes: 15,
-            intervals: 4
+            focusMinutes: 1,
+            shortRestMinutes: 1,
+            longRestMinutes: 2,
+            intervals: 2
         },
-        intervals: []
+        intervals: [],
+        timerActive: false
     },
     mutations: {
         generateIntervals (state) {
@@ -37,6 +38,8 @@ export const store = new Vuex.Store({
         
         changeConfigFocusMinutes (state, payload) {
             state.pomodoroConfig.focusMinutes = payload.newFocusMinutes;
+
+            console.log(payload);
         },
 
         changeConfigShortRestMinutes (state, payload) {
@@ -53,6 +56,14 @@ export const store = new Vuex.Store({
 
         setConfigToDefault (state) {
             state.pomodoroConfig = state.defaultPomodoroConfig;
+        },
+
+        toggleTimerActive (state) {
+            state.timerActive = !state.timerActive;
+        },
+
+        setTimerActiveFalse (state) {
+            state.timerActive = false;
         }
     }
 })
