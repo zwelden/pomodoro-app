@@ -3,58 +3,54 @@
         <div class="text-xl text-gray-600 font-semibold mb-6">
             Config Options
         </div>
-        <div class="section-wrapper mb-10">
-            <div class="section-title text-lg text-gray-700 mb-1">
-                Focus Minutes
-            </div>
-            <div class="section-value">
-                <input type="number" v-model="focusMinutes" @change="changeFocusMinutes" min="1" max="60" step="1" class="text-center bg-gray-200 rounded p-1 text-blue-900 font-semibold">
-            </div>
-            <div class="value-slider">
-                <input type="range" min="1" max="60" v-model="focusMinutes" @change="changeFocusMinutes" class="slider-input bg-gray-300">
-            </div>
-        </div>
-        <div class="section-wrapper mb-10">
-            <div class="section-title text-lg text-gray-700 mb-1">
-                Short Rest Minutes
-            </div>
-            <div class="section-value">
-                <input type="number" v-model="shortRestMinutes" @change="changeShortRestMinutes" class="text-center bg-gray-200 border border-gray-300 rounded p-1 text-blue-900 font-semibold">
-            </div>
-            <div class="value-slider">
-                <input type="range" min="1" max="30" v-model="shortRestMinutes" @change="changeShortRestMinutes" class="slider-input bg-gray-300">
-            </div>
-        </div>
-        <div class="section-wrapper mb-10">
-            <div class="section-title text-lg text-gray-700 mb-1">
-                Long Rest Minutes
-            </div>
-            <div class="section-value">
-                <input type="number" v-model="longRestMinutes" @change="changeLongRestMinutes" class="text-center bg-gray-200 border border-gray-300 rounded p-1 text-blue-900 font-semibold">
-            </div>
-            <div class="value-slider">
-                <input type="range" min="1" max="60" v-model="longRestMinutes" @change="changeLongRestMinutes" class="slider-input bg-gray-300">
-            </div>
-        </div>
-        <div class="section-wrapper mb-10">
-            <div class="section-title text-lg text-gray-700 mb-1">
-                Pomodoro Intervals
-            </div>
-            <div class="section-value">
-                <input type="number" v-model="intervals" @change="changeIntervals" class="text-center bg-gray-200 border border-gray-300 rounded p-1 text-blue-900 font-semibold">
-            </div>
-            <div class="value-slider">
-                <input type="range" min="1" max="15" v-model="intervals" @change="changeIntervals" class="slider-input bg-gray-300">
-            </div>
-        </div>
+        <ConfigOptionSliderInput 
+            v-model="focusMinutes" 
+            @change="changeFocusMinutes" 
+            :min="1" 
+            :max="60" 
+            :option-title="'Focus Minutes'" 
+            class="mb-10">
+        </ConfigOptionSliderInput>
+
+        <ConfigOptionSliderInput 
+            v-model="shortRestMinutes" 
+            @change="changeShortRestMinutes" 
+            :min="1" 
+            :max="30" 
+            :option-title="'Short Rest Minutes'" 
+            class="mb-10">
+        </ConfigOptionSliderInput>
+
+        <ConfigOptionSliderInput 
+            v-model="longRestMinutes" 
+            @change="changeLongRestMinutes" 
+            :min="1" 
+            :max="60" 
+            :option-title="'Long Rest Minutes'" 
+            class="mb-10">
+        </ConfigOptionSliderInput>
+
+        <ConfigOptionSliderInput 
+            v-model="intervals" 
+            @change="changeIntervals" 
+            :min="1" 
+            :max="15" 
+            :option-title="'Pomodoro Intervals'" 
+            class="mb-10">
+        </ConfigOptionSliderInput>
     </div>
 </template>
 
 <script>
+import ConfigOptionSliderInput from './ConfigOptionSliderInput.vue';
+
 import { EventBus } from '../eventBus';
 
 export default {
     name: 'PomodoroConfigManager',
+    components: {
+        ConfigOptionSliderInput
+    },
     data() {
         return {
             focusMinutes: 0,
@@ -100,47 +96,3 @@ export default {
     }
 }
 </script>
-
-<style>
-.section-value input {
-    width: 5rem;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-.section-value input::-webkit-inner-spin-button, 
-.section-value input::-webkit-outer-spin-button { 
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.slider-input {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 60%;
-    height: 6px;
-    opacity: 0.6;
-}
-
-.slider-input:hover {
-    opacity: 1;
-    background: #bee3f8 !important;
-}
-
-.slider-input::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    background: #63b3ed;
-    cursor: pointer;
-    border-radius: 100%;
-}
-
-.slider-input:focus {
-    -webkit-appearance: none;
-    appearance: none;
-    outline: none;
-}
-</style>

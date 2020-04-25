@@ -20,17 +20,15 @@ export const store = new Vuex.Store({
         generateIntervals (state) {
             state.intervals = [];
 
-            let totalIntervals = state.pomodoroConfig.intervals;
-            console.log(totalIntervals)
+            let totalIntervals = parseInt(state.pomodoroConfig.intervals);
 
             for (let interval = 1; interval <= totalIntervals; interval++) {
                 let timeBlock = {
                     focusMinutes: state.pomodoroConfig.focusMinutes,
                     restMinutes: state.pomodoroConfig.shortRestMinutes
                 }
-                console.log(interval);
+                
                 if (interval === totalIntervals) {
-                    console.log('in if condition')
                     timeBlock.restMinutes = state.pomodoroConfig.longRestMinutes
                 }
 
@@ -39,21 +37,21 @@ export const store = new Vuex.Store({
         },
         
         changeConfigFocusMinutes (state, payload) {
-            state.pomodoroConfig.focusMinutes = payload.newFocusMinutes;
+            state.pomodoroConfig.focusMinutes = parseInt(payload.newFocusMinutes);
 
             console.log(payload);
         },
 
         changeConfigShortRestMinutes (state, payload) {
-            state.pomodoroConfig.shortRestMinutes = payload.newShortRestMinutes;
+            state.pomodoroConfig.shortRestMinutes = parseInt(payload.newShortRestMinutes);
         },
 
         changeConfigLongRestMinutes (state, payload) {
-            state.pomodoroConfig.longRestMinutes = payload.newLongRestMinutes;
+            state.pomodoroConfig.longRestMinutes = parseInt(payload.newLongRestMinutes);
         },
 
         changeConfigIntervals (state, payload) {
-            state.pomodoroConfig.intervals = payload.newIntervals;
+            state.pomodoroConfig.intervals = parseInt(payload.newIntervals);
         },
 
         setConfigToDefault (state) {
