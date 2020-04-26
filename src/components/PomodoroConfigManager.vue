@@ -38,6 +38,14 @@
             :option-title="'Pomodoro Intervals'" 
             class="mb-10">
         </ConfigOptionSliderInput>
+
+        <div class="text-center">
+            <div @click="closeConfig"
+                class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer border-0 border-b-2 bg-gray-200 text-gray-700 border-gray-400"
+            >
+                Close
+            </div>
+        </div>
     </div>
 </template>
 
@@ -86,6 +94,10 @@ export default {
             this.$store.commit('generateIntervals');
 
             EventBus.$emit('reload-timers');
+        },
+
+        closeConfig() {
+            EventBus.$emit('set-config-active-state', {isActive: false});
         }
     },
     created () {
@@ -98,7 +110,7 @@ export default {
 </script>
 
 <style>
-.pomdoro-config-manager-card {
+.pomodoro-config-manager-card {
     background: #fffefc;
 }
 </style>

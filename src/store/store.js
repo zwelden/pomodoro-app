@@ -14,7 +14,8 @@ export const store = new Vuex.Store({
             intervals: 2
         },
         intervals: [],
-        timerActive: false
+        timerActive: false,
+        configActive: false
     },
     mutations: {
         generateIntervals (state) {
@@ -27,7 +28,7 @@ export const store = new Vuex.Store({
                     focusMinutes: state.pomodoroConfig.focusMinutes,
                     restMinutes: state.pomodoroConfig.shortRestMinutes
                 }
-                
+
                 if (interval === totalIntervals) {
                     timeBlock.restMinutes = state.pomodoroConfig.longRestMinutes
                 }
@@ -64,6 +65,18 @@ export const store = new Vuex.Store({
 
         setTimerActiveFalse (state) {
             state.timerActive = false;
-        }
+        },
+
+        toggleConfigActive (state) {
+            state.configActive = !state.configActive;
+        },
+
+        setConfigActiveState (state, payload) {
+            if (typeof payload.isActive !== 'boolean') {
+                payload.isActive = false;
+            }
+
+            state.configActive = payload.isActive;
+        },
     }
 })

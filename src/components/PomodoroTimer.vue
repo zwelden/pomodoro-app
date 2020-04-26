@@ -1,5 +1,5 @@
 <template>
-    <div class="pomodoro-timer max-w-sm w-full">
+    <div class="pomodoro-timer">
 
         <TimeBlockCard :focus-time="currentTimerBlockFocusMinutes" :rest-time="currentTimerBlockRestMinutes" :current-active="currentTimeBlock.currentTimer"></TimeBlockCard>
         
@@ -18,14 +18,19 @@
             </div>
         </div>
 
-        <PomodoroConfigManager />
+        <div class="text-center">
+            <div @click="toggleConfigView" 
+                class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer border-0 border-b-2 bg-gray-200 text-gray-700 border-gray-400"
+            >
+                Config
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import TimeBlockCard from './TimeBlockCard.vue';
 import TimerDisplay from './TimerDisplay.vue';
-import PomodoroConfigManager from './PomodoroConfigManager.vue';
 
 import { EventBus } from '../eventBus';
 
@@ -33,8 +38,7 @@ export default {
     name: 'PomodoroTimer',
     components: {
         TimeBlockCard,
-        TimerDisplay,
-        PomodoroConfigManager
+        TimerDisplay
     },
     data() {
         return {
@@ -197,6 +201,10 @@ export default {
             }
             
             setTimeout(this.secondCountDown, nextTimeout);
+        },
+
+        toggleConfigView() {
+            EventBus.$emit('toggle-config-active');
         }
     },
     computed: {
