@@ -14,12 +14,14 @@ export const store = new Vuex.Store({
             intervals: 2
         },
         intervals: [],
+        currentInterval: 0,
         timerActive: false,
         configActive: false
     },
     mutations: {
         generateIntervals (state) {
             state.intervals = [];
+            state.currentInterval = 0;
 
             let totalIntervals = parseInt(state.pomodoroConfig.intervals);
 
@@ -39,8 +41,6 @@ export const store = new Vuex.Store({
         
         changeConfigFocusMinutes (state, payload) {
             state.pomodoroConfig.focusMinutes = parseInt(payload.newFocusMinutes);
-
-            console.log(payload);
         },
 
         changeConfigShortRestMinutes (state, payload) {
@@ -78,5 +78,13 @@ export const store = new Vuex.Store({
 
             state.configActive = payload.isActive;
         },
+
+        incrementCurrentInterval (state) {
+            state.currentInterval++;
+        },
+
+        resetCurrentInterval (state) {
+            state.currentInterval = 1;
+        }
     }
 })

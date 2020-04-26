@@ -13,6 +13,8 @@
             </div>
         </div>
 
+        <TimerSequenceTracker v-if="numIntervals > 1" :numBlocks="numIntervals" :activeBlock="currentInterval" />
+
         <div class="timer-countdown-bar-container">
             <div class="timer-countdown-bar bg-indigo-300"></div>
             <div class="timer-countdown-ball bg-indigo-300" :style="{top: leftPosition}"></div>
@@ -21,8 +23,13 @@
 </template>
 
 <script>
+import TimerSequenceTracker from './TimerSequenceTracker.vue'
+
 export default {
     name: 'TimerDisplay',
+    components: {
+        TimerSequenceTracker
+    },
     props: ['title', 'timeRemaining', 'totalTime'],
     computed: {
         remainingTimeDisplay () {
@@ -39,6 +46,13 @@ export default {
             }
 
             return percent + '%';
+        },
+        numIntervals () {
+            console.log(this.$store.state.intervals.length)
+            return this.$store.state.intervals.length;
+        },
+        currentInterval () {
+            return this.$store.state.currentInterval;
         }
     }
 }
@@ -90,7 +104,7 @@ export default {
         position: absolute;
         top: 2rem;
         bottom: 2rem;
-        right: 2rem;
+        right: 1.5rem;
         z-index: 2;
     }
 

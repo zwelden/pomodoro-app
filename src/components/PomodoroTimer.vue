@@ -47,7 +47,6 @@ export default {
                 restMinutes : 0,
                 currentTimer: 'next'
             },
-            timers: [],
             currentTimerBlockFocusMinutes: 0,
             currentTimerBlockRestMinutes: 0,
             secondsPassed: 0,
@@ -115,12 +114,7 @@ export default {
         },
 
         playCompletionSound() {
-            let _this = this;
             this.completionSound.play();
-
-            setTimeout(function () {
-                _this.completionSound.play();
-            }, 2700);
         },
 
         setTimerFromCurrentTimeBlock() {
@@ -146,16 +140,35 @@ export default {
             this.currentTimerBlockRestMinutes = this.currentTimeBlock.restMinutes;
         },
 
+        getNextIntervalBlock () {
+            let currentInterval = this.$store.state.currentInterval;
+            let intervals = this.$store.state.intervals;
+
+            if (currentInterval > intervals) {
+                return false;
+            }
+
+            return intervals[currentInterval - 1];
+        },
+
         getNextTimer() {            
             if (
                 (!this.currentTimeBlock || !this.currentTimeBlock.focusMinutes || this.currentTimeBlock.currentTimer === 'next') 
-                && this.timers.length > 0
+                && this.$store.state.intervals.length > 0
             ) {
-                this.currentTimeBlock = this.timers.shift();
+                console.log(this.$store.state.currentInterval);
+                this.$store.commit('incrementCurrentInterval');
+                console.log(this.$store.state.currentInterval);
+
+                this.currentTimeBlock = this.getNextIntervalBlock();
+
+                if (this.currentTimeBlock === false) {
+                    return;
+                }
 
                 this.currentTimeBlock.currentTimer = 'focus';
                 this.loadCurrentTimerMinutes();
-            } else if (this.timers.length <= 0) {
+            } else if (this.$store.state.intervals.length <= 0) {
                 return;
             }
             
@@ -221,8 +234,6 @@ export default {
         this.$store.commit('setConfigToDefault');
         this.$store.commit('generateIntervals');
 
-        this.timers = this.$store.state.intervals;
-
         this.getNextTimer();
     },
     mounted() {
@@ -231,9 +242,8 @@ export default {
                 focusMinutes : 0,
                 restMinutes : 0,
                 currentTimer: 'next'
-            },
-            this.timers = this.$store.state.intervals;
-
+            };
+        
             this.getNextTimer();
         });
     }
