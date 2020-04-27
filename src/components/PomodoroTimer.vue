@@ -6,6 +6,7 @@
         <TimerDisplay :title="timerType" 
                 :time-remaining="remainingTime" 
                 :total-time="timerTotalTime" 
+                :display-color="timerDisplayColor()"
                 class="mb-8">
         </TimerDisplay>
 
@@ -84,7 +85,9 @@ export default {
             this.timerText = 'Stop';
             setTimeout(this.secondCountDown, 1000);
 
-            this.$store.commit('incrementCurrentInterval');
+            if (this.currentTimeBlock.currentTimer === 'focus') {
+                this.$store.commit('incrementCurrentInterval');
+            }
         },
 
         pauseTimer() {
@@ -224,6 +227,22 @@ export default {
             this.$store.commit('deactivateWarningFlash');
 
             EventBus.$emit('toggle-config-active');
+        },
+
+        timerDisplayColor () {
+            if (!this.currentTimeBlock.currentTimer) {
+                return 'gray';
+            }
+
+            if (this.currentTimeBlock.currentTimer === 'focus') {
+                return 'indigo';
+            }
+
+            if (this.currentTimeBlock.currentTimer === 'rest') {
+                return 'teal';
+            }
+
+            return 'gray';
         }
     },
     computed: {
@@ -234,7 +253,7 @@ export default {
         },
         timerActive () {
             return this.$store.state.timerActive;
-        }
+        },
     },
     created() {
         this.$store.commit('setConfigToDefault');

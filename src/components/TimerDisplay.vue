@@ -1,5 +1,5 @@
 <template>
-    <div class="timer-countdown-card text-center rounded overflow-hidden shadow-lg bg-indigo-100">
+    <div class="timer-countdown-card text-center rounded overflow-hidden shadow-lg" :class="'bg-' + displayColor + '-100'">
         <div class="timer-countdown-fill-bg"></div>
         
         <div class="radial-gradient"></div>
@@ -8,14 +8,14 @@
             <div class="timer-title font-semibold text-3xl pt-2 text-gray-600 ">
                 <span class="time-type">{{ title }}</span>
             </div>
-            <div class="countdown-timer-text text-blue-700 text-5xl font-semibold tracking-widest">
+            <div class="countdown-timer-text text-5xl font-semibold tracking-widest" :class="'text-' + displayColor + '-900'">
                 {{ remainingTimeDisplay }}
             </div>
         </div>
 
-        <TimerSequenceTracker v-if="numIntervals > 1" :numBlocks="numIntervals" :activeBlock="currentInterval" :blockColor="'indigo'"/>
+        <TimerSequenceTracker v-if="numIntervals > 1" :numBlocks="numIntervals" :activeBlock="currentInterval" :blockColor="displayColor"/>
         
-        <CountdownBarContainer :barColor="'indigo'" :progressPercent="progressPercent" />
+        <CountdownBarContainer :barColor="displayColor" :progressPercent="progressPercent" />
         
     </div>
 </template>
@@ -30,7 +30,7 @@ export default {
         TimerSequenceTracker,
         CountdownBarContainer
     },
-    props: ['title', 'timeRemaining', 'totalTime'],
+    props: ['title', 'timeRemaining', 'totalTime', 'displayColor'],
     computed: {
         remainingTimeDisplay () {
             let minutes = Math.floor(this.timeRemaining / 60);
@@ -98,5 +98,9 @@ export default {
         box-shadow: 0 0 150px 75px #fff;
         z-index: 1;
         border-radius: 100%;
+    }
+
+    .time-type {
+        opacity: 0.9;
     }
 </style>
