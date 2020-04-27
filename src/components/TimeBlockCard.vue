@@ -1,28 +1,28 @@
 <template>
-    <div class="timer-card flex justify-between mb-6 rounded overflow-hidden">
-            <div class="px-3 text-center" :class="{'greyed-out': focusClass}">
-                <div class="font-semibold text-gray-700">
-                    Focus Duration
-                </div>
-                <div class="px-2">
-                    <input type="number" :value="focusTime" id="focus-duration" class="text-2xl text-center shadow appearance-none border rounded w-full py-2 pl-3 pr-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                <div class="text-gray-600">
-                    minutes
-                </div>
+    <div class="timer-card flex justify-center mb-6 rounded overflow-hidden">
+        <div class="px-4 text-center flex justify-center items-center" :class="{'greyed-out': focusClass}">
+            <div class="font-semibold text-gray-600">
+                focus
             </div>
-            <div class="px-3 text-center" :class="{'greyed-out': restClass}">
-                <div class="font-semibold text-gray-700">
-                    Rest Duration
-                </div>
-                <div class="px-2">
-                    <input type="number" :value="restTime" id="rest-duration" class="text-2xl text-center shadow appearance-none border rounded w-full py-2 pl-3 pr-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                <div class="text-gray-600">
-                    minutes
-                </div>
+            <div class="px-2 text-xl text-gray-800 font-semibold">
+                {{ focusTime }}
+            </div>
+            <div class="text-gray-600 font-semibold">
+                min
             </div>
         </div>
+        <div class="px-4 text-center flex justify-center items-center" :class="{'greyed-out': restClass}">
+            <div class="font-semibold text-gray-600">
+                rest
+            </div>
+            <div class="px-2 text-xl text-gray-800 font-semibold">
+                {{ restTime }}
+            </div>
+            <div class="text-gray-600 font-semibold">
+                min
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -51,6 +51,6 @@ export default {
 
 <style>
 .greyed-out {
-    opacity: 0.4;
+    opacity: 0.3;
 }
 </style>

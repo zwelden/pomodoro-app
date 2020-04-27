@@ -1,13 +1,11 @@
 <template>
-    <div class="timer-countdown-card text-center rounded overflow-hidden shadow-lg" :class="'bg-' + displayColor + '-100'">
-        <div class="timer-countdown-fill-bg"></div>
-        
+    <div class="timer-countdown-card text-center rounded">
         <div class="radial-gradient"></div>
 
         <div class="timer-content">
-            <div class="timer-title font-semibold text-3xl pt-2 text-gray-600 ">
+            <!-- <div class="timer-title font-semibold text-3xl pt-2 text-gray-600 ">
                 <span class="time-type">{{ title }}</span>
-            </div>
+            </div> -->
             <div class="countdown-timer-text text-5xl font-semibold tracking-widest" :class="'text-' + displayColor + '-900'">
                 {{ remainingTimeDisplay }}
             </div>
@@ -61,15 +59,7 @@ export default {
 <style>
     .timer-countdown-card {
         position: relative;
-        padding-top: 66%;
-    }
-
-    .timer-countdown-fill-bg {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 100%;
+        padding-top: 75%;
     }
 
     .timer-content {
@@ -89,18 +79,18 @@ export default {
         transform: translateY(-50%);
     }
 
+    .time-type {
+        opacity: 0.9;
+    }
+
     .radial-gradient {
         position: absolute;
         top: 50%;
         left: 50%;
-        height: 0;
-        width: 0;
+        height: 1px;
+        width: 1px;
         box-shadow: 0 0 150px 75px #fff;
         z-index: 1;
         border-radius: 100%;
-    }
-
-    .time-type {
-        opacity: 0.9;
     }
 </style>

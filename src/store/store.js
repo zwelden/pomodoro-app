@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
         },
         intervals: [],
         currentInterval: 0,
+        currentTimerSection: '', // 'focus' || 'rest' || ''
         timerActive: false,
         configActive: false,
         warningFlashActive: false
@@ -23,6 +24,7 @@ export const store = new Vuex.Store({
         generateIntervals (state) {
             state.intervals = [];
             state.currentInterval = 0;
+            state.timerSection = '';
 
             let totalIntervals = parseInt(state.pomodoroConfig.intervals);
 
@@ -94,6 +96,10 @@ export const store = new Vuex.Store({
 
         deactivateWarningFlash (state) {
             state.warningFlashActive = false;
+        },
+
+        updateCurrentTimerSection (state, payload) {
+            state.currentTimerSection = payload.timerSection;
         }
     }
 })

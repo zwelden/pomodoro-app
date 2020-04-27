@@ -1,17 +1,28 @@
 <template>
-  <div id="app" class="container mx-auto p-0 min-h-screen">
+  <div id="app" class="container mx-auto p-0 min-h-screen px-3">
+
+    <TimerBackground :bgColor="bgColor" />
 
     <BackgroundFlash v-if="warningFlashActive"/>
+
+    <BackgroundTexture />
+
+    <div class="settings-btn-wrapper">
+      <div class="text-right max-w-screen-md p-4 m-auto">
+        <SettingsButton />
+      </div>
+    </div>
 
     <div class="pomodoro-timer-component flex justify-center items-center h-screen">
       <pomodoro-timer class="max-w-sm w-full"></pomodoro-timer>
     </div>
 
     <transition name="fade">
-      <div v-if="configActive" class="pomodoro-config-manager-component flex justify-center items-center h-screen w-screen bg-gray-100">
+      <div v-if="configActive" class="pomodoro-config-manager-component flex justify-center items-center h-screen w-screen">
         <PomodoroConfigManager class="max-w-md w-full" />
       </div>
     </transition>
+
   </div>
 
 </template>
@@ -20,6 +31,9 @@
 import PomodoroTimer from './components/PomodoroTimer.vue'
 import PomodoroConfigManager from './components/PomodoroConfigManager.vue';
 import BackgroundFlash from './components/BackgroundFlash.vue';
+import TimerBackground from './components/TimerBackground.vue';
+import BackgroundTexture from './components/BackgroundTexture.vue';
+import SettingsButton from './components/SettingsButton.vue';
 
 import { EventBus } from './eventBus';
 
@@ -28,7 +42,10 @@ export default {
   components: {
     PomodoroTimer,
     PomodoroConfigManager,
-    BackgroundFlash
+    BackgroundFlash,
+    TimerBackground,
+    BackgroundTexture,
+    SettingsButton
   },
   computed: {
     configActive () {
@@ -36,6 +53,13 @@ export default {
     },
     warningFlashActive () {
       return this.$store.state.warningFlashActive
+    },
+    bgColor () {
+      if (this.$store.state.currentTimerSection === 'rest') {
+        return 'teal';
+      } 
+
+      return 'indigo';
     }
   },
   mounted () {
@@ -60,7 +84,9 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
   z-index: 10;
+  background: #fffefc;
 }
 
 
@@ -70,5 +96,13 @@ export default {
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+.settings-btn-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
 }
 </style>

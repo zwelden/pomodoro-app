@@ -1,5 +1,5 @@
 <template>
-    <div class="pomodoro-config-manager-card rounded overflow-hidden shadow-lg border border-gray-200 p-4 text-center">
+    <div class="pomodoro-config-manager-card rounded overflow-hidden py-4 px-8 text-center">
         <div class="text-xl text-gray-600 font-semibold mb-6">
             Config Options
         </div>
@@ -110,7 +110,5 @@ export default {
 </script>
 
 <style>
-.pomodoro-config-manager-card {
-    background: #fffefc;
-}
+
 </style>

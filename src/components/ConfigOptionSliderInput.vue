@@ -1,10 +1,12 @@
 <template>
     <div class="config-option-wrapper">
-        <div class="config-option-title text-lg text-gray-700 mb-1">
-            {{ optionTitle }}
-        </div>
-        <div class="config-option-value">
-            <input type="number" :value="value" v-on:input="updateValue($event.target.value)" v-on:change="onChange" :min="min" :max="max" step="1" class="text-center bg-gray-200 rounded p-1 text-blue-900 font-semibold">
+        <div class="flex justify-between items-center">
+            <div class="config-option-title text-lg text-gray-700 mb-1">
+                {{ optionTitle }}
+            </div>
+            <div class="config-option-value">
+                <input type="number" :value="value" v-on:input="updateValue($event.target.value)" v-on:change="onChange" :min="min" :max="max" step="1" class="text-center bg-gray-200 rounded p-1 text-blue-900 font-semibold">
+            </div>
         </div>
         <div class="config-option-slider">
             <input type="range" :min="min" :max="max" :value="value" v-on:input="updateValue($event.target.value)" v-on:change="onChange" class="config-option-input bg-gray-300">
@@ -45,7 +47,7 @@ export default {
 .config-option-input {
     -webkit-appearance: none;
     appearance: none;
-    width: 60%;
+    width: 100%;
     height: 6px;
     opacity: 0.6;
 }

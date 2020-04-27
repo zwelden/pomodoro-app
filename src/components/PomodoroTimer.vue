@@ -7,23 +7,21 @@
                 :time-remaining="remainingTime" 
                 :total-time="timerTotalTime" 
                 :display-color="timerDisplayColor()"
-                class="mb-8">
+                class="mb-6">
         </TimerDisplay>
 
-        <div class="text-center rounded overflow-hidden mb-8">
+        <div class="flex justify-center items-center rounded overflow-hidden">
             <div @click="toggleTimer" 
-                class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer border-0 border-b-2" 
-                v-bind:class="timerActive ? 'bg-red-200 text-red-700 border-red-400' : 'bg-green-200 text-green-700 border-green-400'"
+                class="h-16 w-16 fill-current cursor-pointer" 
+                :class="'text-'+ timerDisplayColor() +'-500'"
             >
-                {{ timerText }}
-            </div>
-        </div>
+                <span v-if="timerActive">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
+                </span>
 
-        <div class="text-center">
-            <div @click="toggleConfigView" 
-                class="rounded inline-block px-10 py-2 text-lg font-semibold tracking-wide cursor-pointer border-0 border-b-2 bg-gray-200 text-gray-700 border-gray-400"
-            >
-                Config
+                <span v-if="!timerActive">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
+                </span>
             </div>
         </div>
     </div>
@@ -55,12 +53,11 @@ export default {
             timerTotalTime: 0,
             startTime: 0,
             endTime: 0,
+            timerStarted: false,
             timerInterval: null,
             lastIterationStart: 0,
             targetIntervalTime: 1000,
             timerType: 'Focus',
-            timerText: 'Start',
-            someNumber: 1234,
             completionSound: new Audio(require('../assets/complete.mp3'))
         }
     },
@@ -82,17 +79,16 @@ export default {
             this.startTime = Date.now();
             this.endTime = this.startTime + diff;
 
-            this.timerText = 'Stop';
             setTimeout(this.secondCountDown, 1000);
 
-            if (this.currentTimeBlock.currentTimer === 'focus') {
+            if (this.currentTimeBlock.currentTimer === 'focus' && this.timerStarted === false) {
                 this.$store.commit('incrementCurrentInterval');
+                this.timerStarted = true;
             }
         },
 
         pauseTimer() {
             this.clearTimer();
-            this.timerText = 'Start';
             this.$store.commit('deactivateWarningFlash');
         },
 
@@ -105,8 +101,9 @@ export default {
 
         endTimer() {
             this.clearTimer();
-            this.timerText = 'Start';
             this.playCompletionSound();
+            
+            this.timerStarted = false;
 
             this.$store.commit('deactivateWarningFlash');
             this.$store.commit('setTimerActiveFalse');
@@ -138,6 +135,7 @@ export default {
                 'rest': 'Rest'
             };
 
+            this.$store.commit('updateCurrentTimerSection', {timerSection: this.currentTimeBlock.currentTimer});
             this.timerType = timerTypes[this.currentTimeBlock.currentTimer];
             this.remainingTime = this.currentTimeBlock[this.currentTimeBlock.currentTimer + 'Minutes'] * 60
         },
@@ -223,26 +221,16 @@ export default {
             setTimeout(this.secondCountDown, nextTimeout);
         },
 
-        toggleConfigView() {
-            this.$store.commit('deactivateWarningFlash');
-
-            EventBus.$emit('toggle-config-active');
-        },
-
         timerDisplayColor () {
             if (!this.currentTimeBlock.currentTimer) {
                 return 'gray';
-            }
-
-            if (this.currentTimeBlock.currentTimer === 'focus') {
-                return 'indigo';
             }
 
             if (this.currentTimeBlock.currentTimer === 'rest') {
                 return 'teal';
             }
 
-            return 'gray';
+            return 'indigo';
         }
     },
     computed: {
