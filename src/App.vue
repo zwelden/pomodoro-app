@@ -59,7 +59,7 @@ export default {
         return 'teal';
       } 
 
-      return 'indigo';
+      return 'blue';
     }
   },
   mounted () {

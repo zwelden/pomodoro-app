@@ -230,7 +230,7 @@ export default {
                 return 'teal';
             }
 
-            return 'indigo';
+            return 'blue';
         }
     },
     computed: {
@@ -256,6 +256,8 @@ export default {
                 restMinutes : 0,
                 currentTimer: 'next'
             };
+
+            this.timerStarted = false;
         
             this.getNextTimer();
         });
