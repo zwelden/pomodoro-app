@@ -8,15 +8,16 @@ export const store = new Vuex.Store({
         pomodoroType: 'generated', // 'generated' / 'manual'
         pomodoroConfig: {},
         defaultPomodoroConfig: {
-            focusMinutes: 1,
-            shortRestMinutes: 1,
-            longRestMinutes: 2,
-            intervals: 2
+            focusMinutes: 25,
+            shortRestMinutes: 5,
+            longRestMinutes: 15,
+            intervals: 4
         },
         intervals: [],
         currentInterval: 0,
         timerActive: false,
-        configActive: false
+        configActive: false,
+        warningFlashActive: false
     },
     mutations: {
         generateIntervals (state) {
@@ -85,6 +86,14 @@ export const store = new Vuex.Store({
 
         resetCurrentInterval (state) {
             state.currentInterval = 1;
+        },
+
+        activateWarningFlash (state) {
+            state.warningFlashActive = true;
+        },
+
+        deactivateWarningFlash (state) {
+            state.warningFlashActive = false;
         }
     }
 })

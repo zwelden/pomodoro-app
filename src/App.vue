@@ -1,5 +1,8 @@
 <template>
   <div id="app" class="container mx-auto p-0 min-h-screen">
+
+    <BackgroundFlash v-if="warningFlashActive"/>
+
     <div class="pomodoro-timer-component flex justify-center items-center h-screen">
       <pomodoro-timer class="max-w-sm w-full"></pomodoro-timer>
     </div>
@@ -16,6 +19,7 @@
 <script>
 import PomodoroTimer from './components/PomodoroTimer.vue'
 import PomodoroConfigManager from './components/PomodoroConfigManager.vue';
+import BackgroundFlash from './components/BackgroundFlash.vue';
 
 import { EventBus } from './eventBus';
 
@@ -23,11 +27,15 @@ export default {
   name: 'App',
   components: {
     PomodoroTimer,
-    PomodoroConfigManager
+    PomodoroConfigManager,
+    BackgroundFlash
   },
   computed: {
     configActive () {
       return this.$store.state.configActive;
+    },
+    warningFlashActive () {
+      return this.$store.state.warningFlashActive
     }
   },
   mounted () {

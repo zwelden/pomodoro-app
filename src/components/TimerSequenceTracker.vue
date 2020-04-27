@@ -3,7 +3,7 @@
         <div v-for="x in numBlocks" 
             class="sequence-block" 
             :key="x"
-            :class="activeBlock == x ? 'active' : ''" 
+            :class="activeBlock == x ? 'active bg-' + blockColor + '-300' : 'bg-' + blockColor + '-200'" 
             :style="{top: calculateTopPercent(x) + '%', height: calculateHeightPercent() + '%'}">
         </div>
     </div>
@@ -15,7 +15,8 @@ export default {
     name: 'TimerSequenceTracker',
     props: {
         numBlocks: Number,
-        activeBlock: Number
+        activeBlock: Number,
+        blockColor: String
     },
     methods: {
         calculateTopPercent (x) {
@@ -40,7 +41,7 @@ export default {
 
 .sequence-block {
     position: absolute;
-    background: #c3dafe;
+    /* background: #c3dafe; */
     width: 4px;
     border-radius: 4px;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
@@ -49,6 +50,6 @@ export default {
 .sequence-block.active {
     transform: translateX(12px);
     width: 6px;
-    background: #a3bffa;
+    /* background: #a3bffa; */
 }
 </style>

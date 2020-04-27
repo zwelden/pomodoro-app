@@ -83,11 +83,14 @@ export default {
 
             this.timerText = 'Stop';
             setTimeout(this.secondCountDown, 1000);
+
+            this.$store.commit('incrementCurrentInterval');
         },
 
         pauseTimer() {
             this.clearTimer();
             this.timerText = 'Start';
+            this.$store.commit('deactivateWarningFlash');
         },
 
         clearTimer() {
@@ -102,6 +105,7 @@ export default {
             this.timerText = 'Start';
             this.playCompletionSound();
 
+            this.$store.commit('deactivateWarningFlash');
             this.$store.commit('setTimerActiveFalse');
 
             if (this.currentTimeBlock.currentTimer === 'focus') {
@@ -148,7 +152,7 @@ export default {
                 return false;
             }
 
-            return intervals[currentInterval - 1];
+            return intervals[currentInterval];
         },
 
         getNextTimer() {            
@@ -156,10 +160,6 @@ export default {
                 (!this.currentTimeBlock || !this.currentTimeBlock.focusMinutes || this.currentTimeBlock.currentTimer === 'next') 
                 && this.$store.state.intervals.length > 0
             ) {
-                console.log(this.$store.state.currentInterval);
-                this.$store.commit('incrementCurrentInterval');
-                console.log(this.$store.state.currentInterval);
-
                 this.currentTimeBlock = this.getNextIntervalBlock();
 
                 if (this.currentTimeBlock === false) {
@@ -208,6 +208,10 @@ export default {
 
             this.targetIntervalTime = nextTimeout;
 
+            if (this.remainingTime <= 5) {
+                this.$store.commit('activateWarningFlash');
+            }
+
             if (this.remainingTime <= 0 || currentTime > this.endTime) {
                 this.endTimer();
                 return;
@@ -217,6 +221,8 @@ export default {
         },
 
         toggleConfigView() {
+            this.$store.commit('deactivateWarningFlash');
+
             EventBus.$emit('toggle-config-active');
         }
     },

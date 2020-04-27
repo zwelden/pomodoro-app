@@ -13,22 +13,22 @@
             </div>
         </div>
 
-        <TimerSequenceTracker v-if="numIntervals > 1" :numBlocks="numIntervals" :activeBlock="currentInterval" />
-
-        <div class="timer-countdown-bar-container">
-            <div class="timer-countdown-bar bg-indigo-300"></div>
-            <div class="timer-countdown-ball bg-indigo-300" :style="{top: leftPosition}"></div>
-        </div>
+        <TimerSequenceTracker v-if="numIntervals > 1" :numBlocks="numIntervals" :activeBlock="currentInterval" :blockColor="'indigo'"/>
+        
+        <CountdownBarContainer :barColor="'indigo'" :progressPercent="progressPercent" />
+        
     </div>
 </template>
 
 <script>
 import TimerSequenceTracker from './TimerSequenceTracker.vue'
+import CountdownBarContainer from './CountdownBarContainer.vue'
 
 export default {
     name: 'TimerDisplay',
     components: {
-        TimerSequenceTracker
+        TimerSequenceTracker,
+        CountdownBarContainer
     },
     props: ['title', 'timeRemaining', 'totalTime'],
     computed: {
@@ -38,14 +38,14 @@ export default {
 
             return minutes + ':' + ('0' + seconds).slice(-2);
         },
-        leftPosition () {
+        progressPercent () {
             let percent =  Math.floor(((this.totalTime - this.timeRemaining) / this.totalTime) * 10000) / 100;
 
             if (!percent || percent <= 0 || isNaN(percent)) {
                 return 0;
             }
 
-            return percent + '%';
+            return percent;
         },
         numIntervals () {
             console.log(this.$store.state.intervals.length)
@@ -98,28 +98,5 @@ export default {
         box-shadow: 0 0 150px 75px #fff;
         z-index: 1;
         border-radius: 100%;
-    }
-
-    .timer-countdown-bar-container {
-        position: absolute;
-        top: 2rem;
-        bottom: 2rem;
-        right: 1.5rem;
-        z-index: 2;
-    }
-
-    .timer-countdown-bar {
-        position: relative;
-        height: 100%;
-        width: 2px;
-    }
-
-    .timer-countdown-ball {
-        position: absolute;
-        right: -5px;
-        height: 12px;
-        width: 12px;
-        border-radius: 50%;
-        transform: translateY(-50%);
     }
 </style>
