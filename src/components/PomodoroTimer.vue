@@ -10,10 +10,10 @@
                 class="mb-6">
         </TimerDisplay>
 
-        <div class="flex justify-center items-center rounded overflow-hidden">
+        <div class="flex justify-center items-center rounded overflow-hidden mb-4">
             <div @click="toggleTimer" 
                 class="h-16 w-16 fill-current cursor-pointer" 
-                :class="'text-'+ timerDisplayColor() +'-500'"
+                :class="'text-'+ timerDisplayColor() +'-400 hover:text-'+ timerDisplayColor() +'-500'"
             >
                 <span v-if="timerActive">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
@@ -24,12 +24,18 @@
                 </span>
             </div>
         </div>
+
+
+        <div class="flex justify-center items-center">
+            <SettingsButton />
+        </div>
     </div>
 </template>
 
 <script>
 import TimeBlockCard from './TimeBlockCard.vue';
 import TimerDisplay from './TimerDisplay.vue';
+import SettingsButton from './SettingsButton.vue';
 
 import { EventBus } from '../eventBus';
 
@@ -37,7 +43,8 @@ export default {
     name: 'PomodoroTimer',
     components: {
         TimeBlockCard,
-        TimerDisplay
+        TimerDisplay,
+        SettingsButton
     },
     data() {
         return {

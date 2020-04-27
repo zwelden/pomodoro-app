@@ -1,6 +1,6 @@
 <template>
     <div class="timer-card flex justify-center mb-6 rounded overflow-hidden">
-        <div class="px-4 text-center flex justify-center items-center" :class="{'greyed-out': focusClass}">
+        <div class="timer-section px-4 text-center flex justify-center items-center" :class="{'active-timer-section': focusClass}">
             <div class="font-semibold text-gray-600">
                 focus
             </div>
@@ -11,7 +11,7 @@
                 min
             </div>
         </div>
-        <div class="px-4 text-center flex justify-center items-center" :class="{'greyed-out': restClass}">
+        <div class="timer-section px-4 text-center flex justify-center items-center" :class="{'active-timer-section': restClass}">
             <div class="font-semibold text-gray-600">
                 rest
             </div>
@@ -31,14 +31,14 @@ export default {
     props: ['focusTime', 'restTime', 'currentActive'],
     computed: {
         focusClass() {
-            if (this.currentActive !== 'focus') {
+            if (this.currentActive === 'focus') {
                 return true;
             }
 
             return false;
         },
         restClass() {
-            if (this.currentActive !== 'rest') {
+            if (this.currentActive === 'rest') {
                 return true;
             }
 
@@ -50,7 +50,13 @@ export default {
 </script>
 
 <style>
-.greyed-out {
+.timer-section {
     opacity: 0.3;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.active-timer-section {
+    opacity: 1;
+    transform: scale(1.2);
 }
 </style>

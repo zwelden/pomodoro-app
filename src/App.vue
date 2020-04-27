@@ -7,12 +7,6 @@
 
     <BackgroundTexture />
 
-    <div class="settings-btn-wrapper">
-      <div class="text-right max-w-screen-md p-4 m-auto">
-        <SettingsButton />
-      </div>
-    </div>
-
     <div class="pomodoro-timer-component flex justify-center items-center h-screen">
       <pomodoro-timer class="max-w-sm w-full"></pomodoro-timer>
     </div>
@@ -33,7 +27,6 @@ import PomodoroConfigManager from './components/PomodoroConfigManager.vue';
 import BackgroundFlash from './components/BackgroundFlash.vue';
 import TimerBackground from './components/TimerBackground.vue';
 import BackgroundTexture from './components/BackgroundTexture.vue';
-import SettingsButton from './components/SettingsButton.vue';
 
 import { EventBus } from './eventBus';
 
@@ -44,8 +37,7 @@ export default {
     PomodoroConfigManager,
     BackgroundFlash,
     TimerBackground,
-    BackgroundTexture,
-    SettingsButton
+    BackgroundTexture
   },
   computed: {
     configActive () {
