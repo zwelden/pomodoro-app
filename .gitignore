@@ -19,3 +19,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# github pages 'prod' files
+deploy.sh
+vue.config.js

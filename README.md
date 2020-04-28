@@ -13,7 +13,9 @@ npm run serve
 ### Compiles and minifies for production
 ```
 npm run build
-```
+```  
+to compile for use in github pages, see: [Vue Github Pages Prod Build](https://cli.vuejs.org/guide/deployment.html#github-pages)  
+*NOTE*: Check for dynamically generated css before rolling, as PurgeCSS will miss those classes
 
 ### Run your tests
 ```
