@@ -15,11 +15,11 @@
                 class="h-16 w-16 fill-current cursor-pointer" 
                 :class="'text-'+ timerDisplayColor() +'-400 hover:text-'+ timerDisplayColor() +'-500'"
             >
-                <span v-if="timerActive">
+                <span v-if="timerCountdownActive">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
                 </span>
 
-                <span v-if="!timerActive">
+                <span v-if="!timerCountdownActive">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
                 </span>
             </div>
@@ -60,7 +60,6 @@ export default {
             timerTotalTime: 0,
             startTime: 0,
             endTime: 0,
-            timerStarted: false,
             timerInterval: null,
             lastIterationStart: 0,
             targetIntervalTime: 1000,
@@ -70,9 +69,9 @@ export default {
     },
     methods: {
         toggleTimer() {
-            this.$store.commit('toggleTimerActive');
- 
-            if (this.$store.state.timerActive === true) {
+            this.$store.commit('toggleTimerCountdownActive');
+
+            if (this.timerCountdownActive === true) {
                this.startTimer();
                return;
             }
@@ -88,9 +87,9 @@ export default {
 
             setTimeout(this.secondCountDown, 1000);
 
-            if (this.currentTimeBlock.currentTimer === 'focus' && this.timerStarted === false) {
+            if (this.currentTimeBlock.currentTimer === 'focus' && this.timerInProgress === false) {
                 this.$store.commit('incrementCurrentInterval');
-                this.timerStarted = true;
+                this.$store.commit('setTimerInProgressTrue');
             }
         },
 
@@ -110,10 +109,9 @@ export default {
             this.clearTimer();
             this.playCompletionSound();
             
-            this.timerStarted = false;
-
+            this.$store.commit('setTimerInProgressFalse');
             this.$store.commit('deactivateWarningFlash');
-            this.$store.commit('setTimerActiveFalse');
+            this.$store.commit('setTimerCountdownActiveFalse');
 
             if (this.currentTimeBlock.currentTimer === 'focus') {
                 this.currentTimeBlock.currentTimer = 'rest';
@@ -184,7 +182,7 @@ export default {
         },
 
         secondCountDown() {
-            if (!this.$store.state.timerActive) { return; }
+            if (!this.timerCountdownActive) { return; }
 
             let currentTime = Date.now();
 
@@ -246,9 +244,12 @@ export default {
             let seconds = this.remainingTime % 60;
             return minutes + ':' + ('0' + seconds).slice(-2);
         },
-        timerActive () {
-            return this.$store.state.timerActive;
+        timerCountdownActive () {
+            return this.$store.state.timerCountdownActive;
         },
+        timerInProgress () {
+            return this.$store.state.timerInProgress;
+        }
     },
     created() {
         this.$store.commit('setConfigToDefault');
@@ -264,7 +265,7 @@ export default {
                 currentTimer: 'next'
             };
 
-            this.timerStarted = false;
+            this.$store.commit('setTimerInProgressFalse');
         
             this.getNextTimer();
         });

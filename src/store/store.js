@@ -15,8 +15,9 @@ export const store = new Vuex.Store({
         },
         intervals: [],
         currentInterval: 0,
-        currentTimerSection: '', // 'focus' || 'rest' || ''
-        timerActive: false,
+        currentTimerSection: '',      // 'focus' || 'rest' || ''
+        timerCountdownActive: false,  // Timer is actively counting down
+        timerInProgress: false,       // time has started but not yet completed, may be paused
         configActive: false,
         warningFlashActive: false
     },
@@ -62,12 +63,12 @@ export const store = new Vuex.Store({
             state.pomodoroConfig = state.defaultPomodoroConfig;
         },
 
-        toggleTimerActive (state) {
-            state.timerActive = !state.timerActive;
+        toggleTimerCountdownActive (state) {
+            state.timerCountdownActive = !state.timerCountdownActive;
         },
 
-        setTimerActiveFalse (state) {
-            state.timerActive = false;
+        setTimerCountdownActiveFalse (state) {
+            state.timerCountdownActive = false;
         },
 
         toggleConfigActive (state) {
@@ -100,6 +101,14 @@ export const store = new Vuex.Store({
 
         updateCurrentTimerSection (state, payload) {
             state.currentTimerSection = payload.timerSection;
+        },
+
+        setTimerInProgressTrue (state) {
+            state.timerInProgress = true;
+        },
+
+        setTimerInProgressFalse (state) {
+            state.timerInProgress = false;
         }
     }
 })
