@@ -1,7 +1,7 @@
 <template>
     <div class="timer-countdown-bar-container">
-        <div class="timer-countdown-bar" :class="'bg-' + barColor + '-300'"></div>
-        <div class="timer-countdown-ball" :class="'bg-' + barColor + '-300'" :style="{top: topPosition}"></div>
+        <div class="timer-countdown-bar" :class="bgColor"></div>
+        <div class="timer-countdown-ball" :class="bgColor" :style="{top: topPosition}"></div>
     </div>
 </template>
 
@@ -16,6 +16,17 @@ export default {
     computed: {
         topPosition () {
             return this.progressPercent + '%';
+        },
+        bgColor () {
+            if (this.barColor === 'gray') {
+                return 'bg-gray-300';
+            }
+
+            if (this.barColor === 'teal') {
+                return 'bg-teal-300';
+            }
+
+            return 'bg-blue-300';
         }
     }
 }

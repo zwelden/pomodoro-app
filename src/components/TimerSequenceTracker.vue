@@ -3,7 +3,7 @@
         <div v-for="x in numBlocks" 
             class="sequence-block" 
             :key="x"
-            :class="activeBlock == x ? 'active bg-' + blockColor + '-300' : 'bg-' + blockColor + '-200'" 
+            :class="activeBlock == x ? activeBlockClass : inactiveBlockClass" 
             :style="{top: calculateTopPercent(x) + '%', height: calculateHeightPercent() + '%'}">
         </div>
     </div>
@@ -24,6 +24,30 @@ export default {
         },
         calculateHeightPercent () {
             return (100 / this.numBlocks) - 1
+        }
+    },
+    computed: {
+        activeBlockClass () {
+            if (this.blockColor === 'gray') {
+                return 'active bg-gray-300';
+            }
+
+            if(this.blockColor === 'teal') {
+                return 'active bg-teal-300';
+            }
+
+            return 'active bg-blue-300';
+        },
+        inactiveBlockClass () {
+            if (this.blockColor === 'gray') {
+                return 'bg-gray-200';
+            }
+
+            if(this.blockColor === 'teal') {
+                return 'bg-teal-200';
+            }
+
+            return 'bg-blue-200';
         }
     }
 }

@@ -13,7 +13,7 @@
         <div class="flex justify-center items-center rounded overflow-hidden mb-4">
             <div @click="toggleTimer" 
                 class="h-16 w-16 fill-current cursor-pointer" 
-                :class="'text-'+ timerDisplayColor() +'-400 hover:text-'+ timerDisplayColor() +'-500'"
+                :class="textCssClass()"
             >
                 <span v-if="timerCountdownActive">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
@@ -236,7 +236,18 @@ export default {
             }
 
             return 'blue';
-        }
+        },
+        textCssClass () {
+            if (!this.currentTimeBlock.currentTimer) {
+                return 'text-gray-400';
+            }
+
+            if (this.currentTimeBlock.currentTimer === 'rest') {
+                return 'text-teal-400 hover:text-teal-500';
+            }
+
+            return 'text-blue-400 hover:text-blue-500';
+        },
     },
     computed: {
         remainingTimeDisplay () {
@@ -249,7 +260,7 @@ export default {
         },
         timerInProgress () {
             return this.$store.state.timerInProgress;
-        }
+        },
     },
     created() {
         this.$store.commit('setConfigToDefault');

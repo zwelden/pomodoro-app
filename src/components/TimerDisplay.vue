@@ -3,10 +3,7 @@
         <div class="radial-gradient"></div>
 
         <div class="timer-content">
-            <!-- <div class="timer-title font-semibold text-3xl pt-2 text-gray-600 ">
-                <span class="time-type">{{ title }}</span>
-            </div> -->
-            <div class="countdown-timer-text text-5xl font-semibold tracking-widest" :class="'text-' + displayColor + '-900'">
+            <div class="countdown-timer-text text-5xl font-semibold tracking-widest" :class="textCssClass">
                 {{ remainingTimeDisplay }}
             </div>
         </div>
@@ -51,7 +48,19 @@ export default {
         },
         currentInterval () {
             return this.$store.state.currentInterval;
+        },
+        textCssClass () {
+            if (this.displayColor === 'grey') {
+                return 'text-gray-900';
+            }
+
+            if (this.displayColor === 'teal') {
+                return 'text-teal-900';
+            }
+
+            return 'text-blue-900';
         }
+
     }
 }
 </script>
