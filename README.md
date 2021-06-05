@@ -1,5 +1,9 @@
 # pomodoro_app
 
+## About
+A Vue web app for a simple configurable pomodoro timer.  
+<img src="/img/app_screenshot.png" alt="Screenshot" width="300px"></img>
+
 ## Project setup
 ```
 npm install
@@ -14,7 +18,6 @@ npm run serve
 ```
 npm run build
 ```  
-to compile for use in github pages, see: [Vue Github Pages Prod Build](https://cli.vuejs.org/guide/deployment.html#github-pages)  
 *NOTE*: Check for dynamically generated css before rolling, as PurgeCSS will miss those classes
 
 ### Run your tests
@@ -26,6 +29,3 @@ npm run test
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
