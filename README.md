@@ -2,6 +2,7 @@
 
 ## About
 A Vue web app for a simple configurable pomodoro timer.  
+A live demo is avaliable at: [https://peaceful-bose-2cc581.netlify.app](https://peaceful-bose-2cc581.netlify.app)  
 <img src="/img/app_screenshot.png" alt="Screenshot" width="300px"></img>
 
 ## Project setup
